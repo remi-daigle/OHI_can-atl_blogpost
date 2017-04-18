@@ -1,6 +1,6 @@
 ---
 title: "The Ocean Health Index in Atlantic Canada"
-author: "RÃ©mi Daigle, Isabelle CÃ´tÃ©, and Philippe Archambault"
+author: "Rémi Daigle, Isabelle Côté, and Philippe Archambault"
 output:
   html_document: default
   html_notebook: default
@@ -14,7 +14,7 @@ Previously, we customized the OHI goals to create a national Canadian Ocean Heal
 
 Now we want to leverage that work to 
 
-```{r, hide=T}
+```{r,include=FALSE}
 require(tidyverse)
 require(sf)
 require(leaflet)
@@ -24,7 +24,9 @@ regions <- read_sf("regions_final.shp") %>%
 
 
 cols <- RColorBrewer::brewer.pal(nrow(regions),"Paired")
+```
 
+```{r,echo=FALSE}
 leaflet(regions) %>%
     addTiles() %>% 
     addPolygons(group = ~Name,
@@ -35,3 +37,4 @@ leaflet(regions) %>%
     
 ```
 
+**Figure 2:** Proposed boundaries for the new Canadian OHI regional assessment.
