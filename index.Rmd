@@ -19,7 +19,7 @@ require(tidyverse)
 require(sf)
 require(leaflet)
 regions <- read_sf("regions_final.shp") %>% 
-    st_simplify(preserveTopology=T,dTolerance=100) %>%
+    st_simplify(preserveTopology=T,dTolerance=1000) %>%
     st_transform("+proj=longlat +datum=WGS84")
 
 
