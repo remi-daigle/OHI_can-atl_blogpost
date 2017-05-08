@@ -1,0 +1,40 @@
+---
+title: "The Ocean Health Index in Atlantic Canada"
+author: "Rémi Daigle, Isabelle Côté, and Philippe Archambault"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+The rumours are true! We are developing the Ocean Health Index (OHI) for use in Atlantic Canada. The OHI is a composite metric that comprises 10 public goals for healthy and sustainable coupled human and natural systems. The method combines measurements of each goal status into a single index score to reflect trends in overall ocean health. Most importantly, from a management perspective, the performance of each goal is assessed in relation to reference points that are realistic targets for sustainability rather than to a pristine state. By comparing the performance of the different goals and their respective contributions to the overall OHI score, the index can potentially be used to identify which goal(s) may benefit from management intervention.
+
+Previously, we customized the OHI goals to create a national Canadian Ocean Health Index (COHI; Figure 1).  In particular, we altered the list of iconic species assessed, added methane clathrates and subsea permafrost as carbon storage habitats, and developed a new goal, 'Aboriginal Needs', to measure access of Aboriginal people to traditional marine hunting and fishing grounds. Additionally, we used a weighting scheme for the COHI goals based on preferences from a public opinion survey. 
+
+![***Figure 1:** **A)** Canadian OHI (COHI) scores (Daigle et al. unpublished data), for individual goals or subgoals (coloured petals) and overall (central number) for 2013. In COHI, goals are weighted based on a latent-class discrete choice model coefficients. Numbers in italics show goal current status. Mariculture (MAR) and Fisheries (FIS) subgoals are part of the Food Provision goal; Aboriginal Needs (AN); Natural Products (NP); Carbon Storage (CS); Coastal Protection (CP); Tourism & Recreation (TR); Livelihoods (LIV) and Economies (ECO) subgoals are part of the Coastal Livelihoods goal; Iconic species (ICO) and Lasting Special Places (LSP) subgoals are part of Sense of Place; Clean Waters (CW); Habitat (HAB) and Species Protection (SPP) subgoals are part of the Biodiversity goal.**B)** Relative importance of 10 ocean-derived benefits to Canadians, measured as weights from a one-class latent class analysis. Means are shown±1 SD. Total number of respondents=2000. Adapted from [Daigle et al. 2016](http://www.sciencedirect.com/science/article/pii/S0308597X16303323)*](COHI.png)
+
+Now we want to leverage that work to conduct a COHI assessment at a regional scale in Atlantic Canada. This finer scale should make the COHI more relevant to policy decisions since it corresponds to the management regions defined by Fisheries and Oceans Canada. The central challenge is now to identify relevant regional data sources that correspond to the OHI goals. We also need to work with First Nation communities to realign the 'Aboriginal Needs' goal to local priorities.
+
+```{r,include=FALSE,cache=TRUE}
+require(tidyverse)
+require(sf)
+require(leaflet)
+regions <- read_sf("regions_final.shp") %>% 
+    st_simplify(preserveTopology=T,dTolerance=1000) %>%
+    st_transform("+proj=longlat +datum=WGS84")
+
+
+cols <- RColorBrewer::brewer.pal(nrow(regions),"Paired")
+```
+
+```{r,echo=FALSE,cache=TRUE}
+leaflet(regions) %>%
+    addTiles() %>% 
+    addPolygons(group = ~Name,
+                color = cols) %>%
+     addLegend("topright", 
+               colors = cols,
+               labels = unique(regions$Name))
+    
+```
+
+***Figure 2:** Proposed boundaries for the new Canadian OHI regional assessment.*

@@ -1,0 +1,42 @@
+---
+title: "L'indice de la Santé des Océans au Canada atlantique"
+author: "Rémi Daigle, Isabelle Côté, and Philippe Archambault"
+output:
+    html_document: default
+    html_notebook: default
+---
+    
+Les rumeurs sont vraies! Nous développons l'Indice de la Santé des Océans (ISO) pour utilisation dans le Canada atlantique. L'ISO est une mesure composite qui comprend 10 indicateurs publics pour des systèmes humains et naturels couplés et sains. La méthode combine les mesures de chaque statut d'indicateur. en un seul score d'indice pour refléter les tendances de la santé globale de l'océan. Plus important encore, du point de vue de la gestion, la performance de chaque indicateur est évaluée par rapport aux points de référence qui sont des cibles réalistes pour la durabilité plutôt que pour un état vierge. En comparant la performance des différents indicateurs et leurs contributions respectives au score ISO global, l'indice peut potentiellement être utilisé pour identifier les indicateurs susceptibles de bénéficier de l'intervention de la direction.
+
+Auparavant, nous avons personnalisé les indicateurs de l'ISO pour créer un indice canadien de la santé des océans (CISO, figure 1). En particulier, nous avons modifié la liste des espèces iconiques évaluées, ajouté des clathrates de méthane et du pergélisol sous-marin en tant qu'habitats de stockage du carbone, et nous avons développé un nouvel indicateur, «Besoins autochtones», afin de mesurer l'accès des Autochtones aux chasses de pêche et de pêche traditionnelles. En outre, nous avons utilisé un schéma de pondération pour les indicateurs de CISO en fonction des préférences d'un sondage d'opinion publique.
+
+![***Figure 1:** **A)** scores ISO canadiens (CISO) (Daigle et al., Données non publiées), pour les indicateurs individuels ou sous-produits (pétales colorés) et global (nombre central) pour 2013. Dans CISO, les indicateurs sont pondérés en fonction d'un modèle discret discret de classe latente. Les chiffres en italique montrent le statut actuel de l'indicateur. Les sous-produits de la mariculture (MAR) et des pêches (FIS) font partie de l'indicateur de l'Approvisionnement alimentaire; Besoins autochtones (AN); Produits non-alimentaires (NP); Stockage du carbone (CS); Protection côtière (CP); Tourisme et loisirs (TR); Les sous-indicateurs des moyens de subsistance (LIV) et des économies (ECO) font partie de l'indicateur des moyens de subsistance côtiers; Les Espèces iconiques (ICO) et les Lieux emblématiques (LSP) font partie de Lieux et espèces emblématiques; Eaux propres (CW); Les sous-indicateurs de l'Habitat (HAB) et de la Protection des espèces (SPP) font partie de l'indicateur de la Biodiversité. **B)** Importance relative de 10 avantages dérivés des océans pour les Canadiens, mesurés en tant que poids d'une analyse de classe latente d'une classe. Les moyens sont affichés ± 1 SD. Nombre total de répondants = 2000. Adapté de [Daigle et al. 2016](http://www.sciencedirect.com/science/article/pii/S0308597X16303323)*](COHI.png)
+
+Maintenant, nous voulons exploiter ce travail pour mener une évaluation CISO à l'échelle régionale au Canada atlantique. Cette échelle plus fine devrait rendre l'IDH plus pertinente pour les décisions politiques car elle correspond aux régions de gestion définies par Pêches et Océans Canada. Le défi central est maintenant d'identifier les sources de données régionales pertinentes qui correspondent aux indicateurs de l'ISO. Nous devons également travailler avec les collectivités des Premières nations pour réaligner l'indicateur «Besoins autochtones» aux priorités locales.
+
+```{r,include=FALSE,cache=TRUE}
+require(tidyverse)
+require(sf)
+require(leaflet)
+regions <- read_sf("regions_final.shp") %>% 
+st_simplify(preserveTopology=T,dTolerance=1000) %>%
+st_transform("+proj=longlat +datum=WGS84")
+
+regions$French_Nam[5] <- "Plateau néo-écossais"
+
+
+cols <- RColorBrewer::brewer.pal(nrow(regions),"Paired")
+```
+
+```{r,echo=FALSE,cache=TRUE}
+leaflet(regions) %>%
+addTiles() %>% 
+addPolygons(group = ~French_Nam,
+color = cols) %>%
+addLegend("topright", 
+colors = cols,
+labels = unique(regions$French_Nam))
+
+```
+
+***Figure 2:** Limites proposées pour la nouvelle évaluation régionale canadienne ISO. *
